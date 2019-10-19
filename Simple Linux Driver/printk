@@ -1,0 +1,74 @@
+printk(9)		       Kernel Functions			     printk(9)
+
+NAME
+       printk - print messages to console log
+
+SYNOPSIS
+       #include <linux/kernel.h>
+
+       int printk(const char*fmt, ...)
+
+DESCRIPTION
+       Print  a	 formatted message to the kernel console, much like the printf
+       function of the stdio library. Normally, the message is written to  the
+       physical	 console device of the computer, although this behavior can be
+       changed with the register_console function. Messages are also stored in
+       a message log book.
+
+       The generated string may also start with a message priority code, which
+       sets the priority of the message. The priority code strings are of  the
+       form  <n>  where	 n  is	a  number from 0 - 7. The following macros are
+       defined in the <linux/kernel.h> header file:
+
+	      KERN_EMERG
+		     System is unuseable
+
+	      KERN_ALERT
+		     Action must be taken immediately
+
+	      KERN_CRIT
+		     Critical conditions
+
+	      KERN_ERR
+		     Error conditions
+
+	      KERN_WARNING
+		     Warning conditions
+
+	      KERN_NOTICE
+		     Normal but significant condition
+
+	      KERN_INFO
+		     Informational
+
+	      KERN_DEBUG
+		     Debug-level messages
+
+       For example
+
+	    printk(KERN_NOTICE "Hello, world.\n");
+
+       does the expected thing.
+
+RETURN VALUE
+       Returns the number of characters written to the log.
+
+AVAILABILITY
+       Linux 1.0+
+
+SEE ALSO
+       register_console(9), syslog(2)
+
+       kernel/printk.c
+
+AUTHOR
+       Stephen Williams (steve@icarus.com)
+
+BUGS
+       float and double formats are not supported. Floats and doubles  do  not
+       belong inside the kernel anyhow.
+
+       The  printk  implementation  protects  itself  from interruption, so in
+       principle it can be used in interrupts handlers and critical  sections.
+       However,	 there	are  no	 guarantees about the console function that is
+       registered.
